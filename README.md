@@ -1,10 +1,10 @@
 
 1. **Project Overview:** 
-	- The objective of this project was to understand a customers behavior with a view to identify triggers/actions that may lead to a customer *terminating their insurance policy*.
+	- The objective of this project was to understand a customers behavior with a view to identify triggers/actions that may lead to a customer *terminating their membership*.
 	- The **success metric** for this problem/project was defined as the **capture rate** in the **top 500 predictions**, that is:
-		- Of the top 500 customers predicted, how many *actually* terminated the policy? *(For the purpose of this exercise, as may be evident and is customary, the training/predictions were made on historical data where the expected outcome of the prediction was already known i.e. we had advance knowledge of the customers that terminated their policy)*.
-	- The desired outcome on the **capture rate** success metric was that of a **70% or greater accuracy** in identifying customers **probable** to terminate their policy. In line with this, the models predictions were termination **probabilities**. 
-	- A suite of models were built and trained on **one year** of data with a **three month** look-forward/prediction window. The experiments were iterative and used different date slices for training and prediction windows the length of each being constant as mentioned before. 
+		- Of the top 500 customers predicted, how many *actually* terminated the policy? *(For the purpose of this exercise, as may be evident and is customary, the training/predictions were made on historical data where the expected outcome of the prediction was already known i.e. we had advance knowledge of the customers that terminated their membership)*.
+	- The desired outcome on the **capture rate** success metric was that of a **70% or greater accuracy** in identifying customers **probable** to terminate their membership. In line with this, the models predictions were termination **probabilities**. 
+	- A suite of models were built and trained on **one year** of data with a **three month** look-forward/prediction window. The experiments were iterative and used different date slices for training and prediction windows the length of each being constant, as mentioned before. 
 	- Standard technical performance evaluation criteria were considered; such as:
 		- F1-Score,
 		- Precision,
@@ -21,28 +21,12 @@
     				
 	- **Workflow:** As mentioned, the solution involved iterative experiments and progressed as follows - Data exploration and baseline feature selection/engineering *(performed either manually or in an automated fashion)*, followed by typical data prep, model training, prediction and evaluation steps.
 	
-		- **Data Exploration:** In order to construct a complete view of the customer and their behavior/actions, the following datasets were explored for predictive importance:
-			- Campaign Inclusions
-			- Contact Themes
-			- Active Accounts
-			- Eligibility
-			- Illness
-			- Rebate
-			- Payments
-			- Claims/Benefits
-			- Policy Alterations
-			- Sales Force Marketing Cloud *(SFMC)* Inclusions			
-			- Dependents
-			- Loyalty Utilization
-			- Socio-Economic Index for Areas *(SEIFA)*
-			 *NB: This dataset was sourced from the **Australian Bureau of Statistics** and contains the following indices (Index of Relative Socio-Economic Disadvantage (IRSD), Index of Relative Socio-Economic Advantage and Disadvantage (IRSAD), Index of Education and Occupation (IEO), Index of Economic Resources (IER))*
-			- Policy Holder
-		
-	
+		- **Data Exploration:** In order to construct a complete view of the customer and their behavior/actions, a variety of datasets were explored for predictive importance. *(NB: Details of these have been redacted)*
+				
 		- **Feature Engineering:** Generation of predictive features, either manually derived *(in Data Warehouse using a SQL Query)* or automatically sourced *(from Auto-FE Platform)*.
 	     
 		     - Manual Feature Engineering Table: Source table from Data Warehouse
-		     - Auto Feature Engineering Dataset: If available, will be uploaded to sharepoint. 
+		     - Auto Feature Engineering Dataset: Source output from End-To-End ML platform 
 
 		 - **Dataset Preprocessing:** Once the final datasets were selected, the manually engineered/auto-generated fields/columns in the datasets were processed appropriately based on their data type, and content. Here is a summary of preprocessing applied to the datasets -		
 		 
@@ -57,7 +41,7 @@
 				![Boolean 2](https://github.com/user-attachments/assets/f59d754e-8652-4dbc-866a-985131795106)
 		        	 *Image 2: Boolean Field Handling in Dataset*
 				 
-			 - **String/Categorical Fields:** NaN/Null values in String/Categorical fields were either set to 'NA' or '-1' depending on the nature of the field being handled. Subsequently, the values in the String fields were replaced by a count of the distinct values in that field. Finally, post conversion of the  String/Categorical fields to numerical, they were marked as *categorical* using the *astype('category')* method in the *Pandas* python library.
+			 - **String/Categorical Fields:** NaN/Null values in String/Categorical fields were either set to 'NA' or '-1' depending on the nature of the field being handled. Subsequently, the values in the String fields were replaced by a count of the distinct values in that field. Finally, post conversion of the String/Categorical fields to numerical, they were marked as *categorical* using the *astype('category')* method in the *Pandas* python library.
 			 
 			      ![String Field 1](https://github.com/user-attachments/assets/d2512041-b5dc-4d45-9507-aa28da1ab317)
 			      *Image 3: NaN/Null Handling in String/Categorical Fields*
@@ -142,7 +126,7 @@
 		![Final Confusion Matrix](https://github.com/user-attachments/assets/bd599f66-2d96-4f87-8d51-4de516abfb76)
 		*Image 18: Example of Final Confusion Matrix Output from the Stacked Model*			
 
-	-  **Performance Improvement Strategy - Data Handling, Algorithmic Approaches, NN Hyperparameter Tuning and Results Evaluation:**  
+	- **Performance Improvement Strategy - Data Handling, Algorithmic Approaches, NN Hyperparameter Tuning and Results Evaluation:**  
 		
 	- **Data Handling:**
 	  As mentioned earlier, customer churn datasets are notoriously imbalanced. This poses a significant challenge because standard classification algorithms, optimizing for overall accuracy; tend to perform poorly on the minority class. Several strategies were adopted to mitigate the impact of class imbalance as 
@@ -235,8 +219,8 @@
 		2. **Suboptimal Feature Engineering/Selection:** The manual features, perhaps lacked coverage of key predictive signals or interactions, while the auto-generated features potentially suffered from noise, redundancy, or irrelevance.
 		3. **Lack of Hyperparameter Tuning:** Neural Networks and XGBoost, in particular, have numerous hyperparameters that significantly influence their performance. Although, extensive tuning was applied to the models, this remains an area for further investigation and experimentation.
 		4. **Suboptimal Stacking Architecture:** As noted, the specific *NN -> XGBoost -> LR* sequence might not be ideal, since the choice and combination of base and meta-learners heavily influences stacking performance.
-		5. **Insufficient Data Quality or Volume:** Poor data quality *(errors, inconsistencies)* or insufficient data volume can limit the ability of any model, especially complex ones like NNs and stacked ensembles, to learn meaningful patterns. Data volume was a consistent limitation identified with the modeling 	                   environment, where the environment would run out of RAM *(32 GB)* either during the data pre-processing phase or the NN training phase. Although, attempts were made to handle the 'out-of-memory' issues, by bifurcating the model notebooks into 4 broad brush areas, namely: Preprocessing, Tensor, XGBoost, and 
-                   Prediction; the data volume limitation persisted. 		
+		5. **Insufficient Data Quality or Volume:** Poor data quality *(errors, inconsistencies)* or insufficient data volume can limit the ability of any model, especially complex ones like NNs and stacked ensembles, to learn meaningful patterns. Data volume was a consistent limitation identified with the modeling
+    	             environment, where the environment would run out of RAM *(32 GB)* either during the data pre-processing phase or the NN training phase. Although, attempts were made to handle the 'out-of-memory' issues, by bifurcating the model notebooks into 4 broad brush areas, namely: Preprocessing, Tensor, XGBoost, and Prediction; the data volume limitation persisted. 		
 	
        The stacking process itself introduces layers of complexity. Each stage - base model training, generating predictions to serve as input for the meta-learner, and meta-learner training - requires careful validation. Overfitting or significant errors in the base models *(NN and XGBoost)* may have inevitably degraded the 
        quality of the input data provided to the Logistic Regression meta-learner, limiting its potential effectiveness.
@@ -279,7 +263,7 @@
 	
 	 Finally, feature engineering and selection are critical steps that transform raw data into informative inputs for the model, significantly impacting performance and interpretability. This final section compares the extant manual and automated feature approaches and proposes strategies for improvement and selection. 
          Since, fundamentally, two model versions were created *(albeit, not fully completed due to delivery time constraints and competing priorities)*, a comparison between manually engineered and automatically generated features may be conducted, especially given that both models yielded *poor* performance. Although, 
-         manual feature engineering,  allowed incorporation of domain knowledge about the churn drivers *(e.g., specific usage thresholds, sequences of support interactions, etc.)*, this was a highly time-consuming and labor-intensive task. The quality and coverage were also limited by individual expertise, creativity, and 
+         manual feature engineering, allowed incorporation of domain knowledge about the churn drivers *(e.g., specific usage thresholds, sequences of support interactions, etc.)*, this was a highly time-consuming and labor-intensive task. The quality and coverage were also limited by individual expertise, creativity, and 
          patience; and thus potentially crucial variable interactions might have been missed. At this stage, a key question that remains to be explored is whether the current manual features adequately capture known dynamic aspects of churn, such as changes in behavior over time.
 	 
 	 In contrast, the automated feature engineering approach, was significantly faster, less labor intensive, and systematically explored a vast number of feature combinations and transformations *(e.g., aggregations across related tables, interaction terms)*, that may have been overlooked during manual feature 
@@ -292,7 +276,7 @@
        In general, regardless of the generation method, the feature quality can be enhanced by focusing on dynamics and changes in customer behavior, such as, features representing trends, changes, or recency *(e.g., 'usage change last month vs. previous 3 months', 'days since last login')*, or those quantifying engagement   
        patterns *(e.g., session duration variance, navigation paths in member portal)*, and polynomial features *(e.g., 'support calls * average call duration', 'monthly charges/tenure')*; while also leveraging domain knowledge such as known business rules or customer lifecycle stages.
 
-4. **Next Steps:** The following steps are recommended to systematically address the performance of the existing solutions. Foundational issues are addressed first followed by proposed architectural modifications: 
+5. **Next Steps:** The following steps are recommended to systematically address the performance of the existing solutions. Foundational issues are addressed first followed by proposed architectural modifications: 
 
 	-  **Baseline Re-evaluation and Setup:**
 		- Establish a reliable baseline performance for *both* extant models *(manual and auto-feature)* using the current architecture.
